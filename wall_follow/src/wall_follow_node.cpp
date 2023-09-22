@@ -101,25 +101,27 @@ private:
 
         double right_robot = -90 * M_PI/180;
         double left_robot  = 90 * M_PI/180; 
-        bool rightWall = true;
+        bool rightWall = false;
 
         double theta =  45.0 * M_PI/180;
         double closeAngle = right_robot;
+        
         if (!rightWall)
         {
             theta = theta*-1;
             closeAngle = left_robot;
         }
-
+    
+        double farAngle = closeAngle + theta;
         double b = get_range(ranges, closeAngle);
-        double a = get_range(ranges, closeAngle + theta);
+        double a = get_range(ranges, farAngle);
 
         // DEBUG:
         // std::cout<<"a "<<a<<std::endl;
         // std::cout<<"b "<<b<<std::endl;
 
         // Calculate the angle between the closest part of the wall and b
-        double alpha = std::atan2(a*std::cos(theta)-b, a * std::sin(theta));
+        double alpha = std::atan2(a*std::cos(std::abs(theta))-b, a * std::sin(std::abs(theta)));
         double dist  = b * std::cos(alpha);
 
         //DEBUG:
